@@ -1,0 +1,3 @@
+product_id,product_name,category,sub_category,brand,mrp,cost_price,unit,is_perishable,launch_date,failure_reason
+P0030,Kaveri Dairy Milk 5,Dairy & Bakery,Milk,Kaveri Dairy,50.0,40.39,pack,True,2023-03-14,Critical:product_id_unique
+P0140,CleanPro Detergent 15,Household,Detergent,CleanPro,364.0,251.46,unit,False,2024-03-27,Critical:product_id_unique

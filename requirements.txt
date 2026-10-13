@@ -1,5 +1,6 @@
 pandas
 duckdb
+pyarrow          # parquet engine: the ETL stages data between tasks as parquet
 scikit-learn
 langgraph
 langchain

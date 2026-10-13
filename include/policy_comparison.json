@@ -1,0 +1,93 @@
+{
+  "lenient": {
+    "etl_fact_rows": 2310,
+    "etl_delivered": 2088,
+    "etl_revenue": 1135628.8,
+    "etl_margin": 260999.43,
+    "elt_stg_rows": 2400,
+    "elt_quarantined": 90,
+    "elt_revenue": 1135628.8,
+    "dim_store_rows": 15,
+    "dim_product_rows": 150,
+    "dim_customer_rows": 400,
+    "zones_reported": 5,
+    "categories_reported": 7,
+    "stores_in_sla": 15,
+    "critical_checks_failing": 32,
+    "critical_rows_failed": 243,
+    "warning_rows_failed": 940,
+    "zone_list": [
+      "East",
+      "North",
+      "South",
+      "UNKNOWN",
+      "West"
+    ],
+    "category_list": [
+      "Dairy & Bakery",
+      "Fruits & Vegetables",
+      "Household",
+      "Personal Care",
+      "Snacks & Beverages",
+      "Staples",
+      "UNCATEGORISED"
+    ],
+    "run_states": {
+      "nammamart_etl_arnav_ganguly": "success",
+      "nammamart_elt_arnav_ganguly": "success"
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 102,
+      "payments": 21,
+      "products": 2
+    }
+  },
+  "strict": {
+    "etl_fact_rows": 1897,
+    "etl_delivered": 1718,
+    "etl_revenue": 931157.95,
+    "etl_margin": 227955.56,
+    "elt_stg_rows": 2400,
+    "elt_quarantined": 503,
+    "elt_revenue": 931157.95,
+    "dim_store_rows": 13,
+    "dim_product_rows": 142,
+    "dim_customer_rows": 397,
+    "zones_reported": 4,
+    "categories_reported": 6,
+    "stores_in_sla": 13,
+    "critical_checks_failing": 46,
+    "critical_rows_failed": 1177,
+    "warning_rows_failed": 1664,
+    "zone_list": [
+      "East",
+      "North",
+      "South",
+      "West"
+    ],
+    "category_list": [
+      "Dairy & Bakery",
+      "Fruits & Vegetables",
+      "Household",
+      "Personal Care",
+      "Snacks & Beverages",
+      "Staples"
+    ],
+    "run_states": {
+      "nammamart_etl_arnav_ganguly": "success",
+      "nammamart_elt_arnav_ganguly": "success"
+    },
+    "quarantine_files": {
+      "customers": 8,
+      "orders": 515,
+      "payments": 21,
+      "products": 10,
+      "stores": 2
+    }
+  },
+  "delta": {
+    "revenue_lost": 204470.85,
+    "pct_lost": 18.01
+  }
+}

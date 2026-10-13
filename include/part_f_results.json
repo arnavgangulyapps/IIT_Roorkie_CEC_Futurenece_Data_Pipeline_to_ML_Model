@@ -1,0 +1,1826 @@
+{
+  "1": {
+    "n": 1,
+    "name": "Happy path",
+    "expected": "Both DAGs green. 5 extracts / 5 raw loads run in parallel. 2310 ETL fact rows, 2400 ELT staged, Rs 1,135,628.80 both.",
+    "setup": null,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:21:29.529408+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 14.2,
+        "slowest": [
+          {
+            "task_id": "extract_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 2.1,
+            "start": "2026-10-13 15:21:29.946905+00",
+            "end": "2026-10-13 15:21:32.004602+00"
+          },
+          {
+            "task_id": "extract_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 2.0,
+            "start": "2026-10-13 15:21:29.935549+00",
+            "end": "2026-10-13 15:21:31.935604+00"
+          },
+          {
+            "task_id": "extract_products",
+            "state": "success",
+            "try": 1,
+            "secs": 2.0,
+            "start": "2026-10-13 15:21:29.951935+00",
+            "end": "2026-10-13 15:21:31.935618+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:21:44.905337+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 8.4,
+        "slowest": [
+          {
+            "task_id": "build_mart_delivery_sla",
+            "state": "success",
+            "try": 1,
+            "secs": 0.8,
+            "start": "2026-10-13 15:21:57.699984+00",
+            "end": "2026-10-13 15:21:58.45515+00"
+          },
+          {
+            "task_id": "load_raw_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:21:45.502919+00",
+            "end": "2026-10-13 15:21:46.163944+00"
+          },
+          {
+            "task_id": "stage_masters",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:21:50.101202+00",
+            "end": "2026-10-13 15:21:50.774876+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 2310,
+      "etl_revenue": 1135628.8,
+      "elt_stg_rows": 2400,
+      "elt_mart_revenue": 1135628.8,
+      "raw_orders": 2412,
+      "elt_quarantined": 90
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 102,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        14
+      ],
+      [
+        "orders.order_id_unique",
+        "Critical",
+        12
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        10
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        14
+      ],
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        12
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "payments.amount_paid_positive",
+        "Critical",
+        10
+      ]
+    ]
+  },
+  "2": {
+    "n": 2,
+    "name": "Re-run (idempotency)",
+    "expected": "Fact row counts and revenue unchanged. ELT raw tables grow (append-only audit layer); staging and mart do not.",
+    "setup": null,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:22:10.418386+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 10.3,
+        "slowest": [
+          {
+            "task_id": "extract_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 1.4,
+            "start": "2026-10-13 15:22:10.879072+00",
+            "end": "2026-10-13 15:22:12.321078+00"
+          },
+          {
+            "task_id": "extract_products",
+            "state": "success",
+            "try": 1,
+            "secs": 1.4,
+            "start": "2026-10-13 15:22:10.9178+00",
+            "end": "2026-10-13 15:22:12.327968+00"
+          },
+          {
+            "task_id": "extract_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 1.4,
+            "start": "2026-10-13 15:22:10.89701+00",
+            "end": "2026-10-13 15:22:12.344913+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:22:25.296245+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 8.7,
+        "slowest": [
+          {
+            "task_id": "stage_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.0,
+            "start": "2026-10-13 15:22:33.238186+00",
+            "end": "2026-10-13 15:22:34.26063+00"
+          },
+          {
+            "task_id": "stage_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:22:35.277112+00",
+            "end": "2026-10-13 15:22:35.860648+00"
+          },
+          {
+            "task_id": "record_dq_results",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:22:36.327064+00",
+            "end": "2026-10-13 15:22:36.947981+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 2310,
+      "etl_revenue": 1135628.8,
+      "elt_stg_rows": 2400,
+      "elt_mart_revenue": 1135628.8,
+      "raw_orders": 4824,
+      "elt_quarantined": 90
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 102,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        2400
+      ],
+      [
+        "payments.payment_id_had_duplicates",
+        "Warning",
+        2224
+      ],
+      [
+        "customers.customer_id_had_duplicates",
+        "Warning",
+        400
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "products.product_id_had_duplicates",
+        "Warning",
+        150
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ]
+    ]
+  },
+  "3": {
+    "n": 3,
+    "name": "Incremental load",
+    "expected": "150 new orders inserted, 10 September orders restated to RETURNED with no duplicates. September revenue falls Rs 4,193.70.",
+    "setup": null,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:22:50.854757+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 9.1,
+        "slowest": [
+          {
+            "task_id": "extract_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 1.3,
+            "start": "2026-10-13 15:22:51.501133+00",
+            "end": "2026-10-13 15:22:52.759268+00"
+          },
+          {
+            "task_id": "extract_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.3,
+            "start": "2026-10-13 15:22:51.513874+00",
+            "end": "2026-10-13 15:22:52.76579+00"
+          },
+          {
+            "task_id": "extract_products",
+            "state": "success",
+            "try": 1,
+            "secs": 1.2,
+            "start": "2026-10-13 15:22:51.501002+00",
+            "end": "2026-10-13 15:22:52.736025+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:23:06.427466+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 7.7,
+        "slowest": [
+          {
+            "task_id": "load_raw_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:23:06.922158+00",
+            "end": "2026-10-13 15:23:07.494279+00"
+          },
+          {
+            "task_id": "stage_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:23:12.68258+00",
+            "end": "2026-10-13 15:23:13.321978+00"
+          },
+          {
+            "task_id": "load_raw_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:23:13.758087+00",
+            "end": "2026-10-13 15:23:14.375141+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 2460,
+      "etl_revenue": 1211087.3,
+      "elt_stg_rows": 2550,
+      "elt_mart_revenue": 1211087.3,
+      "raw_orders": 7396,
+      "elt_quarantined": 90
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 112,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.order_id_unique",
+        "Critical",
+        22
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        2400
+      ],
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        2400
+      ],
+      [
+        "payments.payment_id_had_duplicates",
+        "Warning",
+        2224
+      ],
+      [
+        "payments.payment_id_had_duplicates",
+        "Warning",
+        2224
+      ],
+      [
+        "customers.customer_id_had_duplicates",
+        "Warning",
+        400
+      ],
+      [
+        "customers.customer_id_had_duplicates",
+        "Warning",
+        400
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ]
+    ]
+  },
+  "4": {
+    "n": 4,
+    "name": "Missing source file",
+    "expected": "extract_products / load_raw_products retries twice at 1-minute intervals then fails; downstream goes upstream_failed; run_audit still writes a FAILED row via trigger_rule=all_done.",
+    "setup": {
+      "renamed_to": "products.csv.renamed"
+    },
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": false,
+        "run_id": "manual__2026-10-13T15:23:31.078542+00:00",
+        "run_state": "failed",
+        "states": {
+          "success": 4,
+          "failed": 2,
+          "upstream_failed": 5
+        },
+        "max_try": 3,
+        "total_secs": 4.9,
+        "slowest": [
+          {
+            "task_id": "extract_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.0,
+            "start": "2026-10-13 15:23:32.18774+00",
+            "end": "2026-10-13 15:23:33.151302+00"
+          },
+          {
+            "task_id": "extract_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 1.0,
+            "start": "2026-10-13 15:23:32.175374+00",
+            "end": "2026-10-13 15:23:33.136693+00"
+          },
+          {
+            "task_id": "extract_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 0.9,
+            "start": "2026-10-13 15:23:32.21167+00",
+            "end": "2026-10-13 15:23:33.155126+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": false,
+        "run_id": "manual__2026-10-13T15:27:50.512501+00:00",
+        "run_state": "failed",
+        "states": {
+          "success": 4,
+          "upstream_failed": 10,
+          "failed": 2
+        },
+        "max_try": 3,
+        "total_secs": 3.7,
+        "slowest": [
+          {
+            "task_id": "load_raw_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 1.1,
+            "start": "2026-10-13 15:27:51.191657+00",
+            "end": "2026-10-13 15:27:52.321838+00"
+          },
+          {
+            "task_id": "run_audit",
+            "state": "failed",
+            "try": 3,
+            "secs": 0.6,
+            "start": "2026-10-13 15:32:04.962056+00",
+            "end": "2026-10-13 15:32:05.538558+00"
+          },
+          {
+            "task_id": "load_raw_products",
+            "state": "failed",
+            "try": 3,
+            "secs": 0.6,
+            "start": "2026-10-13 15:29:55.572836+00",
+            "end": "2026-10-13 15:29:56.186399+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 0,
+      "etl_revenue": 0,
+      "elt_stg_rows": 0,
+      "elt_mart_revenue": 0,
+      "raw_orders": 2412,
+      "elt_quarantined": 0
+    },
+    "quarantine_files": {},
+    "dq_fail_etl": [],
+    "dq_fail_elt": []
+  },
+  "5": {
+    "n": 5,
+    "name": "New bad data",
+    "expected": "All 5 planted rows quarantined with the right reason, and each reason's count in dq_results increases by one.",
+    "setup": {
+      "expected_quarantine_ids": [
+        "ORD900001",
+        "ORD900002",
+        "ORD900003",
+        "ORD900004",
+        "ORD900005"
+      ],
+      "header": [
+        "order_id",
+        "order_ts",
+        "customer_id",
+        "store_id",
+        "product_id",
+        "quantity",
+        "unit_price",
+        "discount_pct",
+        "order_amount",
+        "payment_mode",
+        "order_status",
+        "channel",
+        "delivery_minutes"
+      ]
+    },
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:32:13.820604+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 9.0,
+        "slowest": [
+          {
+            "task_id": "extract_products",
+            "state": "success",
+            "try": 1,
+            "secs": 1.2,
+            "start": "2026-10-13 15:32:14.426074+00",
+            "end": "2026-10-13 15:32:15.638373+00"
+          },
+          {
+            "task_id": "extract_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 1.2,
+            "start": "2026-10-13 15:32:14.447449+00",
+            "end": "2026-10-13 15:32:15.636451+00"
+          },
+          {
+            "task_id": "extract_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.2,
+            "start": "2026-10-13 15:32:14.451539+00",
+            "end": "2026-10-13 15:32:15.650741+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:32:28.589883+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 8.6,
+        "slowest": [
+          {
+            "task_id": "build_mart_delivery_sla",
+            "state": "success",
+            "try": 1,
+            "secs": 0.8,
+            "start": "2026-10-13 15:32:41.192341+00",
+            "end": "2026-10-13 15:32:41.985148+00"
+          },
+          {
+            "task_id": "stage_masters",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:32:32.165441+00",
+            "end": "2026-10-13 15:32:32.838204+00"
+          },
+          {
+            "task_id": "stage_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:32:35.475422+00",
+            "end": "2026-10-13 15:32:36.052254+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 2310,
+      "etl_revenue": 1135628.8,
+      "elt_stg_rows": 2405,
+      "elt_mart_revenue": 1135628.8,
+      "raw_orders": 2417,
+      "elt_quarantined": 95
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 107,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        19
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        14
+      ],
+      [
+        "orders.order_id_unique",
+        "Critical",
+        12
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        11
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        19
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        14
+      ],
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        12
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        11
+      ]
+    ]
+  },
+  "6": {
+    "n": 6,
+    "name": "Schema change",
+    "expected": "Fails loudly on the missing order_amount column rather than loading nulls silently.",
+    "setup": null,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": false,
+        "run_id": "manual__2026-10-13T15:32:54.327718+00:00",
+        "run_state": "failed",
+        "states": {
+          "upstream_failed": 4,
+          "success": 5,
+          "failed": 2
+        },
+        "max_try": 3,
+        "total_secs": 7.0,
+        "slowest": [
+          {
+            "task_id": "extract_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 1.2,
+            "start": "2026-10-13 15:32:54.999992+00",
+            "end": "2026-10-13 15:32:56.20412+00"
+          },
+          {
+            "task_id": "extract_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.2,
+            "start": "2026-10-13 15:32:55.005396+00",
+            "end": "2026-10-13 15:32:56.209036+00"
+          },
+          {
+            "task_id": "extract_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 1.2,
+            "start": "2026-10-13 15:32:55.001903+00",
+            "end": "2026-10-13 15:32:56.157205+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": false,
+        "run_id": "manual__2026-10-13T15:35:13.182308+00:00",
+        "run_state": "failed",
+        "states": {
+          "upstream_failed": 8,
+          "success": 6,
+          "failed": 2
+        },
+        "max_try": 3,
+        "total_secs": 4.2,
+        "slowest": [
+          {
+            "task_id": "load_raw_products",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:35:14.684297+00",
+            "end": "2026-10-13 15:35:15.372784+00"
+          },
+          {
+            "task_id": "load_raw_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:35:13.599551+00",
+            "end": "2026-10-13 15:35:14.209435+00"
+          },
+          {
+            "task_id": "run_audit",
+            "state": "failed",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:37:26.59192+00",
+            "end": "2026-10-13 15:37:27.162787+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 0,
+      "etl_revenue": 0,
+      "elt_stg_rows": 0,
+      "elt_mart_revenue": 0,
+      "raw_orders": 2412,
+      "elt_quarantined": 0
+    },
+    "quarantine_files": {},
+    "dq_fail_etl": [],
+    "dq_fail_elt": []
+  },
+  "7": {
+    "n": 7,
+    "name": "Volume anomaly",
+    "expected": "The batch_volume_not_collapsed check warns (ETL). The ELT has no equivalent, which is a gap to fix.",
+    "setup": null,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:37:32.011349+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 10.8,
+        "slowest": [
+          {
+            "task_id": "extract_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 1.6,
+            "start": "2026-10-13 15:37:33.075454+00",
+            "end": "2026-10-13 15:37:34.644702+00"
+          },
+          {
+            "task_id": "extract_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 1.6,
+            "start": "2026-10-13 15:37:33.061028+00",
+            "end": "2026-10-13 15:37:34.630883+00"
+          },
+          {
+            "task_id": "extract_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 1.6,
+            "start": "2026-10-13 15:37:33.05904+00",
+            "end": "2026-10-13 15:37:34.633794+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:37:46.884942+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 8.3,
+        "slowest": [
+          {
+            "task_id": "build_mart_delivery_sla",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:37:57.906257+00",
+            "end": "2026-10-13 15:37:58.595516+00"
+          },
+          {
+            "task_id": "load_raw_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:37:53.605827+00",
+            "end": "2026-10-13 15:37:54.263874+00"
+          },
+          {
+            "task_id": "run_audit",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:38:04.392359+00",
+            "end": "2026-10-13 15:38:05.122453+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 49,
+      "etl_revenue": 24014.4,
+      "elt_stg_rows": 50,
+      "elt_mart_revenue": 24014.4,
+      "raw_orders": 50,
+      "elt_quarantined": 1
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 1,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.order_id_known",
+        "Warning",
+        2182
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "payments.amount_paid_positive",
+        "Critical",
+        10
+      ],
+      [
+        "payments.one_payment_per_order",
+        "Warning",
+        8
+      ],
+      [
+        "customers.phone_10_digits",
+        "Warning",
+        7
+      ],
+      [
+        "payments.payment_ts_not_future",
+        "Critical",
+        7
+      ],
+      [
+        "customers.city_present",
+        "Warning",
+        6
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "payments.order_id_known",
+        "Warning",
+        2178
+      ],
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "payments.amount_paid_positive",
+        "Critical",
+        10
+      ],
+      [
+        "payments.payment_ts_not_future",
+        "Critical",
+        7
+      ],
+      [
+        "customers.phone_10_digits",
+        "Warning",
+        7
+      ],
+      [
+        "customers.city_present",
+        "Warning",
+        6
+      ],
+      [
+        "customers.customer_id_had_duplicates",
+        "Warning",
+        5
+      ]
+    ]
+  },
+  "8": {
+    "n": 8,
+    "name": "Distribution drift",
+    "expected": "The amount_matches_formula check catches every drifted row because the brief's mutation makes order_amount inconsistent. S01 revenue collapses rather than inflating.",
+    "setup": 162,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:38:12.287247+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 9.5,
+        "slowest": [
+          {
+            "task_id": "extract_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.4,
+            "start": "2026-10-13 15:38:12.860901+00",
+            "end": "2026-10-13 15:38:14.222481+00"
+          },
+          {
+            "task_id": "extract_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 1.4,
+            "start": "2026-10-13 15:38:12.860383+00",
+            "end": "2026-10-13 15:38:14.225599+00"
+          },
+          {
+            "task_id": "extract_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 1.3,
+            "start": "2026-10-13 15:38:12.859472+00",
+            "end": "2026-10-13 15:38:14.19839+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:38:27.800961+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 9.8,
+        "slowest": [
+          {
+            "task_id": "stage_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.0,
+            "start": "2026-10-13 15:38:35.667159+00",
+            "end": "2026-10-13 15:38:36.652023+00"
+          },
+          {
+            "task_id": "build_mart_delivery_sla",
+            "state": "success",
+            "try": 1,
+            "secs": 0.8,
+            "start": "2026-10-13 15:38:42.369757+00",
+            "end": "2026-10-13 15:38:43.141184+00"
+          },
+          {
+            "task_id": "load_raw_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 0.7,
+            "start": "2026-10-13 15:38:31.142974+00",
+            "end": "2026-10-13 15:38:31.882696+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 2154,
+      "etl_revenue": 1059076.45,
+      "elt_stg_rows": 2400,
+      "elt_mart_revenue": 1059076.45,
+      "raw_orders": 2412,
+      "elt_quarantined": 246
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 258,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        237
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        178
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        13
+      ],
+      [
+        "orders.order_id_unique",
+        "Critical",
+        12
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        10
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        237
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        176
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        13
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        10
+      ]
+    ]
+  },
+  "9": {
+    "n": 9,
+    "name": "Freshness",
+    "expected": "The batch_freshness_within_1_day check warns with staleness_days ~= 30.",
+    "setup": 110,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:38:53.859653+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 10.8,
+        "slowest": [
+          {
+            "task_id": "extract_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 1.3,
+            "start": "2026-10-13 15:38:54.862794+00",
+            "end": "2026-10-13 15:38:56.184764+00"
+          },
+          {
+            "task_id": "extract_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 1.3,
+            "start": "2026-10-13 15:38:54.858036+00",
+            "end": "2026-10-13 15:38:56.16514+00"
+          },
+          {
+            "task_id": "extract_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 1.3,
+            "start": "2026-10-13 15:38:54.855573+00",
+            "end": "2026-10-13 15:38:56.186852+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:39:09.113317+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 7.5,
+        "slowest": [
+          {
+            "task_id": "load_raw_products",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:39:09.831405+00",
+            "end": "2026-10-13 15:39:10.39565+00"
+          },
+          {
+            "task_id": "load_raw_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 0.6,
+            "start": "2026-10-13 15:39:12.438691+00",
+            "end": "2026-10-13 15:39:13.00273+00"
+          },
+          {
+            "task_id": "stage_orders",
+            "state": "success",
+            "try": 1,
+            "secs": 0.5,
+            "start": "2026-10-13 15:39:16.062215+00",
+            "end": "2026-10-13 15:39:16.518434+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 2317,
+      "etl_revenue": 1138845.95,
+      "elt_stg_rows": 2400,
+      "elt_mart_revenue": 1138845.95,
+      "raw_orders": 2412,
+      "elt_quarantined": 83
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 95,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        89
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        14
+      ],
+      [
+        "orders.order_id_unique",
+        "Critical",
+        12
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        10
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        89
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        14
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        10
+      ]
+    ]
+  },
+  "11": {
+    "n": 11,
+    "name": "Distribution drift, CONSISTENT (8b)",
+    "expected": "The realistic version of experiment 8: unit_price AND order_amount both scaled 100x, so the amount formula still holds and every row-level check passes. Before the distribution check existed this inflated revenue to Rs 9.59M silently. Now store_value_distribution should flag S01.",
+    "setup": 162,
+    "dags": {
+      "nammamart_etl_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:39:33.898098+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 11
+        },
+        "max_try": 1,
+        "total_secs": 7.8,
+        "slowest": [
+          {
+            "task_id": "extract_payments",
+            "state": "success",
+            "try": 1,
+            "secs": 1.0,
+            "start": "2026-10-13 15:39:34.554381+00",
+            "end": "2026-10-13 15:39:35.516859+00"
+          },
+          {
+            "task_id": "extract_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 1.0,
+            "start": "2026-10-13 15:39:34.560187+00",
+            "end": "2026-10-13 15:39:35.51023+00"
+          },
+          {
+            "task_id": "extract_products",
+            "state": "success",
+            "try": 1,
+            "secs": 1.0,
+            "start": "2026-10-13 15:39:34.554722+00",
+            "end": "2026-10-13 15:39:35.51257+00"
+          }
+        ],
+        "parallel": [
+          [
+            "extract_customers",
+            "extract_orders",
+            "extract_payments",
+            "extract_products",
+            "extract_stores"
+          ]
+        ],
+        "errors": [],
+        "pipeline_log": []
+      },
+      "nammamart_elt_arnav_ganguly": {
+        "cli_ok": true,
+        "run_id": "manual__2026-10-13T15:39:48.038144+00:00",
+        "run_state": "success",
+        "states": {
+          "success": 16
+        },
+        "max_try": 1,
+        "total_secs": 6.8,
+        "slowest": [
+          {
+            "task_id": "load_raw_customers",
+            "state": "success",
+            "try": 1,
+            "secs": 0.5,
+            "start": "2026-10-13 15:39:49.050595+00",
+            "end": "2026-10-13 15:39:49.588996+00"
+          },
+          {
+            "task_id": "load_raw_stores",
+            "state": "success",
+            "try": 1,
+            "secs": 0.5,
+            "start": "2026-10-13 15:39:51.500285+00",
+            "end": "2026-10-13 15:39:51.987418+00"
+          },
+          {
+            "task_id": "stage_masters",
+            "state": "success",
+            "try": 1,
+            "secs": 0.5,
+            "start": "2026-10-13 15:39:53.914475+00",
+            "end": "2026-10-13 15:39:54.414265+00"
+          }
+        ],
+        "parallel": [],
+        "errors": [],
+        "pipeline_log": []
+      }
+    },
+    "warehouse": {
+      "etl_fact_rows": 2310,
+      "etl_revenue": 8714311.45,
+      "elt_stg_rows": 2400,
+      "elt_mart_revenue": 8714311.45,
+      "raw_orders": 2412,
+      "elt_quarantined": 90
+    },
+    "quarantine_files": {
+      "customers": 5,
+      "orders": 102,
+      "payments": 21,
+      "products": 2
+    },
+    "dq_fail_etl": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        145
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "orders.order_id_unique",
+        "Critical",
+        12
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        10
+      ]
+    ],
+    "dq_fail_elt": [
+      [
+        "payments.gateway_ref_present",
+        "Warning",
+        301
+      ],
+      [
+        "payments.success_amount_matches_order",
+        "Warning",
+        145
+      ],
+      [
+        "payments.order_id_known",
+        "Warning",
+        96
+      ],
+      [
+        "orders.customer_id_present",
+        "Critical",
+        18
+      ],
+      [
+        "orders.amount_matches_formula",
+        "Critical",
+        18
+      ],
+      [
+        "customers.email_format",
+        "Warning",
+        12
+      ],
+      [
+        "orders.order_id_had_duplicates",
+        "Warning",
+        12
+      ],
+      [
+        "orders.quantity_positive",
+        "Critical",
+        10
+      ]
+    ]
+  },
+  "10": {
+    "n": 10,
+    "name": "Recovery via Clear",
+    "expected": "After fixing the cause and clearing only the failed task with --only-failed --downstream, the previously successful tasks keep their original try_number and start time; only the failed task and its downstream re-run.",
+    "setup": {
+      "renamed_to": "products.csv.renamed"
+    },
+    "failed_run": {
+      "run_id": "manual__2026-10-13T15:40:12.964195+00:00",
+      "state": "failed",
+      "states": {
+        "failed": 2,
+        "success": 4,
+        "upstream_failed": 5
+      }
+    },
+    "clear_cmd": "airflow tasks clear nammamart_etl_arnav_ganguly --only-failed --downstream --yes",
+    "clear_out": "ter parsing arguments. [py.warnings] category=PendingDeprecationWarning filename=/usr/local/lib/python3.14/site-packages/airflow/cli/cli_config.py lineno=646\n2026-10-13T15:42:29.021088Z [warning  ] FileType is deprecated. Simply open files after parsing arguments. [py.warnings] category=PendingDeprecationWarning filename=/usr/local/lib/python3.14/site-packages/airflow/cli/cli_config.py lineno=868\n",
+    "after_states": {
+      "success": 11
+    },
+    "re_ran": [
+      "extract_products",
+      "load",
+      "reconcile",
+      "report",
+      "run_audit",
+      "transform",
+      "validate"
+    ],
+    "untouched": [
+      "extract_customers",
+      "extract_orders",
+      "extract_payments",
+      "extract_stores"
+    ],
+    "final_state": "success",
+    "warehouse": {
+      "etl_fact_rows": 2310,
+      "etl_revenue": 1135628.8,
+      "elt_stg_rows": 0,
+      "elt_mart_revenue": 0,
+      "raw_orders": 0,
+      "elt_quarantined": 0
+    }
+  }
+}

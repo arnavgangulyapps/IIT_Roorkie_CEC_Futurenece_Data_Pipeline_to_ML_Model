@@ -1,0 +1,22 @@
+payment_id,order_id,payment_ts,payment_mode,amount_paid,payment_status,gateway_ref,failure_reason
+PAY0001651,ORD000188,2026-09-03 13:23:25,Card,94.5,SUCCESS,GW7909341632,Critical:payment_id_unique; Warning:one_payment_per_order
+PAY0001568,ORD001031,2026-09-14 12:22:19,Card,-43.05,SUCCESS,GW1747803275,Critical:amount_paid_positive; Warning:success_amount_matches_order
+PAY0000396,ORD001121,2026-11-02 18:40:52,Cash on Delivery,358.4,SUCCESS,,Warning:gateway_ref_present; Warning:order_id_known; Critical:payment_ts_not_future
+PAY0000755,ORD000094,2026-09-02 10:58:26,Card,403.2,SUCCESS,GW2899060380,Critical:payment_id_unique; Warning:one_payment_per_order
+PAY0000509,ORD002122,2026-09-27 14:57:42,UPI,148.8,SUCCESS,GW5719011844,Critical:payment_id_unique; Warning:one_payment_per_order
+PAY0000127,ORD002119,2027-01-01 09:01:37,Cash on Delivery,600.0,SUCCESS,,Warning:gateway_ref_present; Warning:order_id_known; Critical:payment_ts_not_future
+PAY0002175,ORD001384,2026-09-18 18:43:20,UPI,-188.7,SUCCESS,GW9799058406,Critical:amount_paid_positive; Warning:order_id_known
+PAY0000116,ORD000469,2026-09-07 11:54:13,UPI,0.0,SUCCESS,GW7610284736,Critical:amount_paid_positive; Warning:order_id_known
+PAY0001908,ORD001725,2027-01-01 09:01:46,Card,430.95,SUCCESS,GW1059710545,Warning:order_id_known; Critical:payment_ts_not_future
+PAY0000751,ORD001459,2026-09-19 14:50:15,UPI,-1593.0,SUCCESS,GW2576628760,Critical:amount_paid_positive; Warning:order_id_known
+PAY0000944,ORD000462,2026-09-07 09:55:31,Card,-1279.65,SUCCESS,GW2644378059,Critical:amount_paid_positive; Warning:order_id_known
+PAY0000791,ORD000867,2026-09-12 15:43:54,UPI,-500.65,SUCCESS,GW1428229749,Critical:amount_paid_positive; Warning:order_id_known
+PAY0001111,ORD001724,2026-09-22 19:41:39,UPI,0.0,SUCCESS,GW3746235380,Critical:amount_paid_positive; Warning:order_id_known
+PAY0001037,ORD001765,2027-01-01 09:01:02,Card,369.0,SUCCESS,GW9380438386,Warning:order_id_known; Critical:payment_ts_not_future
+PAY0000337,ORD001089,2026-10-21 10:15:38,UPI,192.95,SUCCESS,GW7074922345,Warning:order_id_known; Critical:payment_ts_not_future
+PAY0001322,ORD000099,2026-09-02 12:23:19,UPI,0.0,SUCCESS,GW2099593566,Critical:amount_paid_positive; Warning:order_id_known
+PAY0002000,ORD000513,2026-09-07 23:16:17,Wallet,684.0,SUCCESS,GW2663042309,Critical:payment_id_unique; Warning:one_payment_per_order
+PAY0001488,ORD001965,2026-11-02 18:41:31,Cash on Delivery,279.0,SUCCESS,,Warning:gateway_ref_present; Warning:order_id_known; Critical:payment_ts_not_future
+PAY0000954,ORD002360,2026-09-30 14:05:48,Card,0.0,SUCCESS,GW6659249735,Critical:amount_paid_positive; Warning:order_id_known
+PAY0000267,ORD001693,2026-10-21 10:16:40,UPI,986.85,SUCCESS,GW5584108324,Warning:order_id_known; Critical:payment_ts_not_future
+PAY0000737,ORD001296,2026-09-17 16:08:23,UPI,-394.0,SUCCESS,GW1678766266,Critical:amount_paid_positive; Warning:order_id_known
